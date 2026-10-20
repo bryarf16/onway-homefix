@@ -19,6 +19,21 @@ async function seed() {
 
     console.log("Admin user ready (admin@homefix.test / admin123)");
 
+    // 1.1 دروستکردنی ئەکاونتی کڕیاری تێست (Demo Customer)
+    const customerPassword = await bcrypt.hash("customer123", 10);
+    await db
+        .insert(users)
+        .values({
+            name: "Demo Customer (کڕیار)",
+            email: "customer@homefix.test",
+            passwordHash: customerPassword,
+            role: "customer",
+        })
+        .onConflictDoNothing()
+        .returning();
+
+    console.log("Demo customer ready (customer@homefix.test / customer123)");
+
     // 2. دروستکردنی بەشەکان (Categories)
     const categoryData = [
         { name: "Plumbing", nameCkb: "بۆڕیچێتی" },
