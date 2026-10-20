@@ -26,10 +26,42 @@ export const translations = {
     registerFailed: "Failed to create account. Email may already exist.",
     logout: "Logout",
     
-    // Navigation & Tabs
-    home: "Services",
+    // Navigation & Bottom Tabs
+    home: "Home",
+    bookings: "Bookings",
     myBookings: "My Bookings",
+    support: "Support",
+    account: "Account",
     profile: "Profile",
+    
+    // Top Bar & Search
+    deliverTo: "Delivering to",
+    currentCity: "Erbil, Kurdistan",
+    searchPlaceholder: "Search for service, plumber, cleaner...",
+    
+    // Promo Banner
+    bannerTitle: "AC or Plumbing Issues?",
+    bannerSubtitle: "We will fix it fast • Expert technicians at your door",
+    scheduleService: "Schedule Service",
+    fastService: "Instant Booking",
+    
+    // Sections
+    popularServices: "Popular Services",
+    recommendedForYou: "Top Recommended Providers",
+    seeAll: "See all",
+    bestseller: "Top Rated",
+    verifiedPro: "Verified Professional",
+    hourlyRate: "Hourly Rate",
+    iqd: "IQD",
+    perHour: "/ hr",
+    bookNow: "Book Now",
+    callProvider: "Call",
+    
+    // Trust Badges
+    badgeVerified: "Verified Pros",
+    badgePricing: "Transparent Pricing",
+    badgeWarranty: "Satisfaction Guarantee",
+    badgeSupport: "Direct Support",
     
     // Home / Categories
     categoriesTitle: "What service do you need?",
@@ -39,11 +71,9 @@ export const translations = {
     // Providers
     providersTitle: "Available Providers",
     noProviders: "No providers found for this service yet.",
-    hourlyRate: "Hourly Rate",
-    iqd: "IQD",
-    bookNow: "Book Service",
-    callProvider: "Call",
     city: "City",
+    allCities: "All Cities",
+    filterByCity: "Filter by city",
     
     // Booking Form
     createBookingTitle: "Book Provider",
@@ -53,13 +83,15 @@ export const translations = {
     address: "Home Address",
     scheduledAt: "Scheduled Date & Time",
     notes: "Notes / Description of Problem",
-    notesPlaceholder: "e.g. Water leak under the kitchen sink...",
+    notesPlaceholder: "e.g. Water leak under kitchen sink, needs urgent repair...",
     confirmBooking: "Confirm Booking",
-    submittingBooking: "Submitting...",
+    submittingBooking: "Submitting Booking...",
     bookingSuccess: "Your booking request has been submitted successfully!",
+    viewMyBookings: "View in My Bookings",
+    backToHome: "Back to Home",
     
     // My Bookings
-    bookingsTitle: "My Bookings",
+    bookingsSubtitle: "Track live status of your home service requests",
     noBookings: "You have no bookings yet.",
     bookFirstService: "Explore services and book your first provider!",
     status: "Status",
@@ -68,6 +100,8 @@ export const translations = {
     in_progress: "In Progress",
     completed: "Completed",
     cancelled: "Cancelled",
+    scheduledFor: "Scheduled for",
+    addressLabel: "Address",
     
     // General
     loading: "Loading...",
@@ -100,10 +134,42 @@ export const translations = {
     registerFailed: "خۆتۆمارکردن سەرکەوتوو نەبوو. رەنگە ئیمەیڵەکە بەکارهاتبێت.",
     logout: "دەرچوون",
     
-    // Navigation & Tabs
-    home: "خزمەتگوزارییەکان",
+    // Navigation & Bottom Tabs
+    home: "سەرەکی",
+    bookings: "حجزەکانم",
     myBookings: "داواکارییەکانم",
+    support: "پشتیوانی",
+    account: "پڕۆفایل",
     profile: "پڕۆفایل",
+    
+    // Top Bar & Search
+    deliverTo: "شوێنی خزمەتگوزاری",
+    currentCity: "هەولێر، کوردستان",
+    searchPlaceholder: "گەڕان بۆ خزمەتگوزاری، بۆڕیچی، سپلیت...",
+    
+    // Promo Banner
+    bannerTitle: "سپلیت یان بۆڕییەکانت تێکچووە؟",
+    bannerSubtitle: "بە پەلە و بە گەرەنتی بۆت چاک دەکەینەوە • وەستای شارەزا",
+    scheduleService: "دیاریکردنی کات",
+    fastService: "داواکاری خێرا",
+    
+    // Sections
+    popularServices: "خزمەتگوزارییە باوەکان",
+    recommendedForYou: "باشترین وەستا پێشنیازکراوەکان",
+    seeAll: "هەمووی ببینە",
+    bestseller: "باوەڕپێکراو",
+    verifiedPro: "وەستای پەسەندکراو",
+    hourlyRate: "نرخی کاتژمێری",
+    iqd: "د.ع",
+    perHour: "/ کاتژمێر",
+    bookNow: "حجزکردن",
+    callProvider: "پەیوەندی",
+    
+    // Trust Badges
+    badgeVerified: "وەستای باوەڕپێکراو",
+    badgePricing: "نرخی ڕوون و ئاشکرا",
+    badgeWarranty: "گەرەنتی جۆری کار",
+    badgeSupport: "پشتیوانی بەردەوام",
     
     // Home / Categories
     categoriesTitle: "پێویستت بە چ خزمەتگوزارییەکە؟",
@@ -113,11 +179,9 @@ export const translations = {
     // Providers
     providersTitle: "وەستا بەردەستەکان",
     noProviders: "هیچ وەستایەک بۆ ئەم بەشە نەدۆزرایەوە.",
-    hourlyRate: "نرخی کاتژمێری",
-    iqd: "د.ع",
-    bookNow: "حجزکردنی وەستا",
-    callProvider: "پەیوەندی",
     city: "شار",
+    allCities: "هەموو شارەکان",
+    filterByCity: "فلتەر بەپێی شار",
     
     // Booking Form
     createBookingTitle: "داواکردنی وەستا",
@@ -127,13 +191,15 @@ export const translations = {
     address: "ناونیشانی ماڵ",
     scheduledAt: "کات و بەرواری دیاریکراو",
     notes: "تێبینی یان کێشەی کارەکە",
-    notesPlaceholder: "بۆ نموونە: دزەکردنی ئاو لە ژێر سینکی چێشتخانە...",
+    notesPlaceholder: "بۆ نموونە: دزەکردنی ئاو لە ژێر سینکی چێشتخانە، پێویستی بە چاککردنی خێرایە...",
     confirmBooking: "ناردنی داواکاری",
     submittingBooking: "ناردنی داواکاری...",
     bookingSuccess: "داواکارییەکەت بە سەرکەوتوویی تۆمارکرا!",
+    viewMyBookings: "بینین لە لیستی حجزەکانم",
+    backToHome: "گەڕانەوە بۆ سەرەکی",
     
     // My Bookings
-    bookingsTitle: "داواکارییەکانم",
+    bookingsSubtitle: "چاودێری دۆخی ڕاستەوخۆی حجزەکانت بکە",
     noBookings: "هیچ داواکارییەکت نەکردووە تا ئێستا.",
     bookFirstService: "سەیری بەشەکان بکە و یەکەم وەستات داوا بکە!",
     status: "دۆخ",
@@ -142,6 +208,8 @@ export const translations = {
     in_progress: "لە جێبەجێکردندا",
     completed: "تەواوکراو",
     cancelled: "هەڵوەشاوە",
+    scheduledFor: "کاتی دیاریکراو",
+    addressLabel: "ناونیشان",
     
     // General
     loading: "کەمێک چاوەڕوانبە...",

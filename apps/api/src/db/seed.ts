@@ -1,12 +1,13 @@
 import { db } from "./index";
-import { users, categories, providers } from "./schema";
+import { users, categories, providers, bookings } from "./schema";
 const bcrypt = require("bcryptjs");
+
 async function seed() {
-    console.log("Starting seed...");
+    console.log("Starting clean seed...");
 
     // 1. دروستکردنی ئەکاونتی ئەدمین
     const adminPassword = await bcrypt.hash("admin123", 10);
-    const [adminUser] = await db
+    await db
         .insert(users)
         .values({
             name: "Admin User",
@@ -14,8 +15,7 @@ async function seed() {
             passwordHash: adminPassword,
             role: "admin",
         })
-        .onConflictDoNothing()
-        .returning();
+        .onConflictDoNothing();
 
     console.log("Admin user ready (admin@homefix.test / admin123)");
 
@@ -29,48 +29,93 @@ async function seed() {
             passwordHash: customerPassword,
             role: "customer",
         })
-        .onConflictDoNothing()
-        .returning();
+        .onConflictDoNothing();
 
     console.log("Demo customer ready (customer@homefix.test / customer123)");
 
-    // 2. دروستکردنی بەشەکان (Categories)
+    // پاککردنەوەی داتای کۆن بۆ ئەوەی داتای دووبارە نەمێنێت
+    await db.delete(bookings);
+    await db.delete(providers);
+    await db.delete(categories);
+
+    // 2. دروستکردنی بەشەکان بەپێی دیزاینە پێشکەوتووەکە
     const categoryData = [
-        { name: "Plumbing", nameCkb: "بۆڕیچێتی" },
-        { name: "Electrical", nameCkb: "کارەباچێتی" },
-        { name: "Cleaning", nameCkb: "پاککردنەوە" },
-        { name: "HVAC & AC", nameCkb: "سپلیت و تەبریدی" },
+        { name: "House Cleaning", nameCkb: "پاککردنەوەی ماڵ", icon: "home" },
+        { name: "AC Repair", nameCkb: "چاککردنەوەی سپلیت", icon: "snow" },
+        { name: "Plumbing", nameCkb: "بۆڕیچێتی و سەنتەری", icon: "water" },
+        { name: "Electrical", nameCkb: "کارەباچێتی", icon: "flash" },
+        { name: "Washing Machine", nameCkb: "چاککردنەوەی جلشۆر", icon: "refresh" },
+        { name: "Refrigerator", nameCkb: "چاککردنەوەی سەلاجە", icon: "cube" },
+        { name: "Microwave Oven", nameCkb: "مایکرۆوەیڤ و فڕن", icon: "flame" },
+        { name: "Painting & Decor", nameCkb: "بۆیاخکاری و دیکۆر", icon: "color-palette" },
     ];
 
     const insertedCategories = await db
         .insert(categories)
         .values(categoryData)
-        .onConflictDoNothing()
         .returning();
 
     console.log(`Inserted ${insertedCategories.length} categories`);
 
-    // ئەگەر بەشەکان پێشتر هەبوون، لە داتابەیس دەیانهێنینەوە بۆ پەیوەستکردنی وەستاکان
-    const allCategories = await db.select().from(categories);
+    const cleaning = insertedCategories.find((c) => c.name === "House Cleaning");
+    const acRepair = insertedCategories.find((c) => c.name === "AC Repair");
+    const plumbing = insertedCategories.find((c) => c.name === "Plumbing");
+    const electrical = insertedCategories.find((c) => c.name === "Electrical");
+    const washingMachine = insertedCategories.find((c) => c.name === "Washing Machine");
+    const refrigerator = insertedCategories.find((c) => c.name === "Refrigerator");
 
-    const plumbing = allCategories.find((c) => c.name === "Plumbing");
-    const electrical = allCategories.find((c) => c.name === "Electrical");
-    const cleaning = allCategories.find((c) => c.name === "Cleaning");
-
-    // 3. دروستکردنی وەستاکان (Providers)
+    // 3. دروستکردنی وەستاکان بەپێی بەش و شارەکان
     const providerData = [];
+
+    if (acRepair) {
+        providerData.push(
+            {
+                name: "وەستا کاروان مەحموود",
+                categoryId: acRepair.id,
+                city: "Erbil",
+                phone: "07509876543",
+                hourlyRate: 30000,
+            },
+            {
+                name: "وەستا دیار ئەحمەد",
+                categoryId: acRepair.id,
+                city: "Sulaymaniyah",
+                phone: "07703344556",
+                hourlyRate: 25000,
+            }
+        );
+    }
+
+    if (cleaning) {
+        providerData.push(
+            {
+                name: "تیمی پاکوخاوێنی خێرا",
+                categoryId: cleaning.id,
+                city: "Erbil",
+                phone: "07505554433",
+                hourlyRate: 15000,
+            },
+            {
+                name: "سەنتەری پاکی و درەوشاوەیی",
+                categoryId: cleaning.id,
+                city: "Sulaymaniyah",
+                phone: "07701122334",
+                hourlyRate: 18000,
+            }
+        );
+    }
 
     if (plumbing) {
         providerData.push(
             {
-                name: "ئەحمەد فەرهاد",
+                name: "ئەحمەد فەرهاد (بۆڕیچی)",
                 categoryId: plumbing.id,
                 city: "Erbil",
                 phone: "07501234567",
                 hourlyRate: 25000,
             },
             {
-                name: "ڕەنجدەر عەلی",
+                name: "ڕەنجدەر عەلی (بۆڕیچی)",
                 categoryId: plumbing.id,
                 city: "Sulaymaniyah",
                 phone: "07701234567",
@@ -82,29 +127,39 @@ async function seed() {
     if (electrical) {
         providerData.push(
             {
-                name: "کاروان مەحموود",
-                categoryId: electrical.id,
-                city: "Erbil",
-                phone: "07509876543",
-                hourlyRate: 30000,
-            },
-            {
-                name: "سۆران کامەران",
+                name: "سۆران کامەران (کارەباچی)",
                 categoryId: electrical.id,
                 city: "Sulaymaniyah",
                 phone: "07709876543",
                 hourlyRate: 25000,
+            },
+            {
+                name: "بڕیار عەلی محەمەد",
+                categoryId: electrical.id,
+                city: "Duhok",
+                phone: "07501746345",
+                hourlyRate: 35000,
             }
         );
     }
 
-    if (cleaning) {
+    if (washingMachine) {
         providerData.push({
-            name: "تیمی پاکوخاوێنی خێرا",
-            categoryId: cleaning.id,
+            name: "سەنتەری تەکنیکی جلشۆر",
+            categoryId: washingMachine.id,
             city: "Erbil",
-            phone: "07505554433",
-            hourlyRate: 15000,
+            phone: "07508889900",
+            hourlyRate: 20000,
+        });
+    }
+
+    if (refrigerator) {
+        providerData.push({
+            name: "وەستا هێمن سەلاجەچی",
+            categoryId: refrigerator.id,
+            city: "Erbil",
+            phone: "07507776655",
+            hourlyRate: 25000,
         });
     }
 
@@ -116,7 +171,7 @@ async function seed() {
         console.log(`Inserted ${insertedProviders.length} providers`);
     }
 
-    console.log("Seed completed successfully!");
+    console.log("Clean seed completed successfully!");
     process.exit(0);
 }
 
