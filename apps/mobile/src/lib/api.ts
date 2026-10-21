@@ -2,14 +2,12 @@ import Constants from "expo-constants";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-/**
- * ناونیشانی زیرەکی سێرڤەر (Dynamic API URL)
- * بەپێی جۆری ئامێر و شوێنی ڕەنکردن خۆکارانە گونجاوترین IP دەستنیشان دەکات:
- * 1. مۆبایلی ڕاستەقینە لە ڕێگەی Expo Go: ناونیشانی IPی کۆمپیوتەرەکەت وەردەگرێت لە hostUri
- * 2. ئیمولەیتەری ئەندرۆید: بەستنەوە لە ڕێگەی 10.0.2.2:3001
- * 3. وێب یان iOS Simulator: localhost:3001
- */
+// Resolve API host: browser hostname on web, Expo hostUri on native, or local fallbacks
 export const getApiBaseUrl = (): string => {
+  if (typeof window !== "undefined" && window.location?.hostname) {
+    return `http://${window.location.hostname}:3001/api/v1`;
+  }
+
   const hostUri = Constants.expoConfig?.hostUri;
 
   if (hostUri) {
@@ -70,7 +68,6 @@ export const apiFetch = async <T = any>(
 
     return data;
   } catch (err: any) {
-    // ئەگەر کێشەی هێڵ یان سێرڤەر هەبوو
     if (err.message?.includes("Network request failed") || err.message?.includes("Failed to fetch")) {
       throw new Error(`ناتوانرێت پەیوەندی بە سێرڤەرەوە بکرێت لە (${baseUrl}). تکایە دڵنیابە لە کارکردنی باکئیند.`);
     }

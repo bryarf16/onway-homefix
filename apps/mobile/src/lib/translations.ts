@@ -145,7 +145,7 @@ export const translations = {
     // Top Bar & Search
     deliverTo: "شوێنی خزمەتگوزاری",
     currentCity: "هەولێر، کوردستان",
-    searchPlaceholder: "گەڕان بۆ خزمەتگوزاری، بۆڕیچی، سپلیت...",
+    searchPlaceholder: "...گەڕان بۆ خزمەتگوزاری، بۆڕیچی، سپلیت",
     
     // Promo Banner
     bannerTitle: "سپلیت یان بۆڕییەکانت تێکچووە؟",

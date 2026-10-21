@@ -83,7 +83,6 @@ export default function ProvidersScreen() {
     return isRTL ? c.nameCkb : c.name;
   };
 
-  // فلتەرکردن بەپێی شار و گەڕان
   const filteredProviders = providers.filter((p) => {
     const matchesCity = selectedCity === "all" || p.city.toLowerCase() === selectedCity.toLowerCase();
     const matchesSearch =
@@ -107,9 +106,6 @@ export default function ProvidersScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* ========================================================
-            1. HEADER & BACK BUTTON
-            ======================================================== */}
         <View style={[styles.header, flexRowStyle]}>
           <TouchableOpacity
             style={styles.backButton}
@@ -133,11 +129,10 @@ export default function ProvidersScreen() {
             </Text>
           </View>
 
-          {/* Quick city filter chip */}
           <TouchableOpacity
             style={[styles.cityFilterChip, flexRowStyle]}
             onPress={() => {
-              const cities = ["all", "Erbil", "Sulaymaniyah", "Duhok"];
+              const cities = ["all", "Erbil", "Sulaymaniyah", "Ranya", "Duhok"];
               const currentIndex = cities.indexOf(selectedCity);
               const nextIndex = (currentIndex + 1) % cities.length;
               setSelectedCity(cities[nextIndex]);
@@ -146,15 +141,18 @@ export default function ProvidersScreen() {
             <Ionicons name="filter" size={13} color="#059669" />
             <Text style={styles.cityFilterText}>
               {selectedCity === "all"
-                ? lang === "ckb" ? "هەموو" : "All"
-                : selectedCity}
+                ? lang === "ckb" ? "هەموو شارەکان" : "All Cities"
+                : selectedCity === "Erbil"
+                ? lang === "ckb" ? "هەولێر" : "Erbil"
+                : selectedCity === "Sulaymaniyah"
+                ? lang === "ckb" ? "سلێمانی" : "Sulaymaniyah"
+                : selectedCity === "Ranya"
+                ? lang === "ckb" ? "ڕانیە" : "Ranya"
+                : lang === "ckb" ? "دهۆک" : "Duhok"}
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* ========================================================
-            2. SEARCH BAR
-            ======================================================== */}
         <View style={[styles.searchContainer, flexRowStyle]}>
           <Ionicons name="search-outline" size={18} color="#94A3B8" />
           <TextInput
@@ -175,9 +173,6 @@ export default function ProvidersScreen() {
           )}
         </View>
 
-        {/* ========================================================
-            3. CATEGORY FILTER TABS
-            ======================================================== */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -222,9 +217,6 @@ export default function ProvidersScreen() {
           })}
         </ScrollView>
 
-        {/* ========================================================
-            4. PROVIDERS LIST
-            ======================================================== */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#059669" />
@@ -270,7 +262,6 @@ export default function ProvidersScreen() {
                   activeOpacity={0.9}
                   onPress={() => setSelectedProviderForDetail(provider)}
                 >
-                  {/* Top Row: Avatar + Info */}
                   <View style={[styles.cardTopRow, flexRowStyle]}>
                     <View style={styles.avatarWrapper}>
                       <View style={styles.avatarCircle}>
@@ -295,13 +286,22 @@ export default function ProvidersScreen() {
                         </View>
                         <View style={styles.cityBadge}>
                           <Ionicons name="location" size={11} color="#64748B" />
-                          <Text style={styles.cityBadgeText}>{provider.city}</Text>
+                          <Text style={styles.cityBadgeText}>
+                            {provider.city === "Erbil"
+                              ? lang === "ckb" ? "هەولێر" : "Erbil"
+                              : provider.city === "Sulaymaniyah"
+                              ? lang === "ckb" ? "سلێمانی" : "Sulaymaniyah"
+                              : provider.city === "Ranya"
+                              ? lang === "ckb" ? "ڕانیە" : "Ranya"
+                              : provider.city === "Duhok"
+                              ? lang === "ckb" ? "دهۆک" : "Duhok"
+                              : provider.city}
+                          </Text>
                         </View>
                       </View>
                     </View>
                   </View>
 
-                  {/* Middle Row: Rating + Rate */}
                   <View style={[styles.cardMetricsRow, flexRowStyle]}>
                     <View style={[styles.metricItem, flexRowStyle]}>
                       <Ionicons name="star" size={14} color="#EAB308" />
@@ -317,7 +317,6 @@ export default function ProvidersScreen() {
                     </View>
                   </View>
 
-                  {/* Bottom Action Row */}
                   <View style={[styles.cardActionRow, flexRowStyle]}>
                     <TouchableOpacity
                       style={[styles.callBtn, flexRowStyle]}
@@ -351,13 +350,9 @@ export default function ProvidersScreen() {
           </View>
         )}
 
-        {/* Space for BottomNav */}
-        <View style={{ height: 85 }} />
+        <View style={{ height: 95 }} />
       </ScrollView>
 
-      {/* ========================================================
-          5. PROVIDER DETAIL MODAL (Bonus Section 3.4)
-          ======================================================== */}
       <Modal
         visible={!!selectedProviderForDetail}
         transparent
@@ -379,7 +374,16 @@ export default function ProvidersScreen() {
                   {selectedProviderForDetail.name}
                 </Text>
                 <Text style={styles.detailCategory}>
-                  {getCategoryName(selectedProviderForDetail.categoryId)} • {selectedProviderForDetail.city}
+                  {getCategoryName(selectedProviderForDetail.categoryId)} •{" "}
+                  {selectedProviderForDetail.city === "Erbil"
+                    ? lang === "ckb" ? "هەولێر" : "Erbil"
+                    : selectedProviderForDetail.city === "Sulaymaniyah"
+                    ? lang === "ckb" ? "سلێمانی" : "Sulaymaniyah"
+                    : selectedProviderForDetail.city === "Ranya"
+                    ? lang === "ckb" ? "ڕانیە" : "Ranya"
+                    : selectedProviderForDetail.city === "Duhok"
+                    ? lang === "ckb" ? "دهۆک" : "Duhok"
+                    : selectedProviderForDetail.city}
                 </Text>
 
                 <View style={styles.ratingBadgeLarge}>
@@ -450,7 +454,6 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  // Header
   header: {
     alignItems: "center",
     justifyContent: "space-between",
@@ -496,7 +499,6 @@ const styles = StyleSheet.create({
     color: "#059669",
   },
 
-  // Search
   searchContainer: {
     alignItems: "center",
     backgroundColor: "#FFFFFF",
@@ -504,18 +506,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E2E8F0",
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    height: 48,
     marginBottom: 14,
     gap: 8,
   },
   searchInput: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 14,
     color: "#0F172A",
+    height: "100%",
     padding: 0,
+    outlineStyle: "none" as any,
   },
 
-  // Category Tabs
   categoryTabsList: {
     paddingBottom: 14,
     gap: 8,
@@ -542,7 +545,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  // Loading & Empty States
   loadingContainer: {
     paddingVertical: 40,
     alignItems: "center",
@@ -598,7 +600,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  // Provider Cards
   providersList: {
     gap: 14,
   },
@@ -685,7 +686,6 @@ const styles = StyleSheet.create({
     color: "#64748B",
   },
 
-  // Metrics
   cardMetricsRow: {
     justifyContent: "space-between",
     alignItems: "center",
@@ -723,7 +723,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  // Actions
   cardActionRow: {
     alignItems: "center",
     gap: 10,
@@ -759,7 +758,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
 
-  // Detail Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(15, 23, 42, 0.5)",

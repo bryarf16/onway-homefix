@@ -27,7 +27,6 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // پڕکردنەوەی خێرای کڕیاری تێست بۆ ئاسانکاری هەڵسەنگێنەرانی کۆمپانیا
   const fillDemoCustomer = () => {
     setEmail("customer@homefix.test");
     setPassword("customer123");
@@ -49,7 +48,6 @@ export default function LoginScreen() {
 
     try {
       await login(email.trim(), password);
-      // چوونە ناو ئەپەکە دوای لۆگینی سەرکەوتوو
       router.replace("/");
     } catch (err: any) {
       if (err.message?.includes("Invalid email or password") || err.message?.includes("401")) {
@@ -73,7 +71,6 @@ export default function LoginScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* بەشی سەرەوە: دوگمەی گۆڕینی زمان */}
           <View style={[styles.topBar, flexRowStyle]}>
             <TouchableOpacity
               onPress={toggleLanguage}
@@ -87,7 +84,6 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* لۆگۆ و ناوی پڕۆژە */}
           <View style={styles.header}>
             <View style={styles.iconCircle}>
               <Ionicons name="build" size={32} color="#059669" />
@@ -101,29 +97,17 @@ export default function LoginScreen() {
             </Text>
           </View>
 
-          {/* کارتی خێرای کڕیاری تێست (Demo Customer Quick Card) */}
-          <View style={styles.demoCard}>
-            <View style={[styles.demoCardHeader, flexRowStyle]}>
-              <View style={styles.demoBadge}>
-                <Text style={styles.demoBadgeText}>
-                  {lang === "ckb" ? "ئەکاونتی تێست" : "Demo Account"}
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={fillDemoCustomer}
-                style={[styles.fillButton, flexRowStyle]}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="flash" size={14} color="#059669" />
-                <Text style={styles.fillButtonText}>{t.demoCustomerBtn}</Text>
-              </TouchableOpacity>
-            </View>
-            <Text style={[styles.demoCredText, { textAlign: alignText }]}>
-              customer@homefix.test  •  customer123
+          <TouchableOpacity
+            onPress={fillDemoCustomer}
+            style={[styles.demoPill, flexRowStyle]}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="sparkles-outline" size={14} color="#059669" />
+            <Text style={styles.demoPillText}>
+              {lang === "ckb" ? "پڕکردنەوەی ئەکاونتی تێست" : "Auto-fill Demo Account"}
             </Text>
-          </View>
+          </TouchableOpacity>
 
-          {/* پەیامی هەڵە */}
           {error && (
             <View style={[styles.errorContainer, flexRowStyle]}>
               <Ionicons name="alert-circle" size={18} color="#E11D48" />
@@ -133,9 +117,7 @@ export default function LoginScreen() {
             </View>
           )}
 
-          {/* فۆڕم */}
           <View style={styles.form}>
-            {/* خانەی ئیمەیڵ */}
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { textAlign: alignText }]}>
                 {t.email}
@@ -162,7 +144,6 @@ export default function LoginScreen() {
               </View>
             </View>
 
-            {/* خانەی پاسۆرد */}
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { textAlign: alignText }]}>
                 {t.password}
@@ -198,7 +179,6 @@ export default function LoginScreen() {
               </View>
             </View>
 
-            {/* دوگمەی چوونەژوورەوە */}
             <TouchableOpacity
               style={[styles.primaryButton, loading && styles.buttonDisabled]}
               onPress={handleLogin}
@@ -220,7 +200,6 @@ export default function LoginScreen() {
               )}
             </TouchableOpacity>
 
-            {/* بەستەری خۆتۆمارکردن */}
             <View style={[styles.footer, flexRowStyle]}>
               <Text style={styles.footerText}>{t.dontHaveAccount} </Text>
               <TouchableOpacity onPress={() => router.push("/register")}>
@@ -301,55 +280,22 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: "center",
   },
-  demoCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
+  demoPill: {
+    alignSelf: "center",
+    alignItems: "center",
+    backgroundColor: "#F0FDF4",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
-    padding: 14,
+    borderColor: "#DCFCE7",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
   },
-  demoCardHeader: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 6,
-  },
-  demoBadge: {
-    backgroundColor: "#F1F5F9",
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  demoBadgeText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: "#475569",
-  },
-  fillButton: {
-    alignItems: "center",
-    gap: 4,
-    backgroundColor: "#ECFDF5",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#A7F3D0",
-  },
-  fillButtonText: {
-    fontSize: 12,
+  demoPillText: {
+    fontSize: 12.5,
     fontWeight: "700",
     color: "#059669",
-  },
-  demoCredText: {
-    fontSize: 12,
-    fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-    color: "#64748B",
-    marginTop: 4,
   },
   errorContainer: {
     backgroundColor: "#FFF1F2",
@@ -389,9 +335,12 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    height: "100%",
+    fontSize: 14.5,
     color: "#0F172A",
     fontWeight: "500",
+    padding: 0,
+    outlineStyle: "none" as any,
   },
   primaryButton: {
     backgroundColor: "#059669",

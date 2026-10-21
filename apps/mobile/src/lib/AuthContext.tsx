@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // پشکنینی تۆکنی سەیڤکراو لە کاتی کردنەوەی سەرەتایی ئەپەکە
+  // Restore persisted session on mount
   useEffect(() => {
     const initializeAuth = async () => {
       try {

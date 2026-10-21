@@ -75,7 +75,6 @@ export default function HomeScreen() {
     }
   };
 
-  // دیاریکردنی ئایکۆنی شیاو بۆ هەر بەشێک
   const getCategoryIcon = (name: string, fallbackIcon?: string | null): any => {
     const n = name.toLowerCase();
     if (n.includes("clean")) return "home";
@@ -84,12 +83,11 @@ export default function HomeScreen() {
     if (n.includes("electr") || n.includes("کارەبا")) return "flash";
     if (n.includes("wash") || n.includes("جلشۆر")) return "refresh";
     if (n.includes("refrig") || n.includes("سەلاجە")) return "cube";
-    if (n.includes("micro") || n.includes("oven") || n.includes("فڕن")) return "flame";
+    if (n.includes("cabinet") || n.includes("کەوەنتەر")) return "hammer";
     if (n.includes("paint") || n.includes("decor") || n.includes("بۆیاخ")) return "color-palette";
     return fallbackIcon || "construct";
   };
 
-  // بەشە فلتەرکراوەکان بەپێی گەڕان
   const filteredCategories = categories.filter((c) => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
@@ -99,25 +97,24 @@ export default function HomeScreen() {
     );
   });
 
-  // وەستا پێشنیازکراوەکان بۆ کاروسێل
   const featuredCards = [
     {
-      id: "feat-ac",
-      titleEn: "AC Repair & Gas Refill",
-      titleCkb: "چاککردنەوە و گازی سپلیت",
+      id: "feat-elec",
+      titleEn: "Electrical & AC Services",
+      titleCkb: "کارەبایی ",
       rating: "4.8",
       reviews: "1.8K",
       durationEn: "45 mins",
       durationCkb: "٤٥ خولەک",
       price: "25,000",
       originalPrice: "35,000",
-      image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
-      categoryNameEn: "AC Repair",
+      image: require("../../assets/images/Electrical.webp"),
+      categoryNameEn: "Electrical",
       targetProvider: providers.find((p) => p.name.includes("کاروان") || p.hourlyRate === 30000) || providers[0],
     },
     {
       id: "feat-clean",
-      titleEn: "Deep Home Cleaning",
+      titleEn: "Deep House Cleaning",
       titleCkb: "پاککردنەوەی گشتی ماڵ",
       rating: "4.9",
       reviews: "2.3K",
@@ -125,21 +122,21 @@ export default function HomeScreen() {
       durationCkb: "٢.٥ کاتژمێر",
       price: "15,000",
       originalPrice: "20,000",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
+      image: require("../../assets/images/House Cleaning.jpg"),
       categoryNameEn: "House Cleaning",
       targetProvider: providers.find((p) => p.name.includes("پاکوخاوێنی")) || providers[1] || providers[0],
     },
     {
       id: "feat-plumb",
-      titleEn: "Leakage & Pipe Repair",
-      titleCkb: "چاککردنی دزەکردن و بۆڕی",
+      titleEn: "Plumbing & Pipe Repair",
+      titleCkb: "چاککردنی بۆڕی",
       rating: "4.7",
       reviews: "950",
       durationEn: "60 mins",
       durationCkb: "٦٠ خولەک",
       price: "20,000",
       originalPrice: "30,000",
-      image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80",
+      image: require("../../assets/images/Plumbing.jpg"),
       categoryNameEn: "Plumbing",
       targetProvider: providers.find((p) => p.name.includes("ئەحمەد") || p.name.includes("ڕەنجدەر")) || providers[2] || providers[0],
     },
@@ -170,9 +167,6 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* ========================================================
-            1. TOP BAR: شوێن، ئاگاداری، گۆڕینی زمان
-            ======================================================== */}
         <View style={[styles.topBar, flexRowStyle]}>
           <TouchableOpacity
             style={[styles.locationWrapper, flexRowStyle]}
@@ -186,10 +180,12 @@ export default function HomeScreen() {
               <View style={[styles.locationRow, flexRowStyle]}>
                 <Text style={styles.locationTitle}>
                   {selectedCity === "Erbil"
-                    ? lang === "ckb" ? "هەولێر، گەڕەکی بەختیاری" : "Erbil, Bakhtiyari"
+                    ? lang === "ckb" ? "هەولێر" : "Erbil"
                     : selectedCity === "Sulaymaniyah"
-                    ? lang === "ckb" ? "سلێمانی، شەقامی تووی مەلیك" : "Sulaymaniyah, Malik St"
-                    : lang === "ckb" ? "دهۆک، ناوەندی شار" : "Duhok, City Center"}
+                      ? lang === "ckb" ? "سلێمانی" : "Sulaymaniyah"
+                      : selectedCity === "Ranya"
+                        ? lang === "ckb" ? "ڕانیە" : "Ranya"
+                        : lang === "ckb" ? "دهۆک" : "Duhok"}
                 </Text>
                 <Ionicons name="chevron-down" size={14} color="#64748B" />
               </View>
@@ -200,7 +196,6 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <View style={[styles.topActions, flexRowStyle]}>
-            {/* Notification Bell */}
             <TouchableOpacity
               style={styles.iconCircleBtn}
               onPress={() => setNotificationModalVisible(true)}
@@ -210,7 +205,6 @@ export default function HomeScreen() {
               <View style={styles.unreadDot} />
             </TouchableOpacity>
 
-            {/* Language Switcher Badge */}
             <TouchableOpacity
               style={[styles.langSwitchBtn, flexRowStyle]}
               onPress={toggleLanguage}
@@ -224,16 +218,13 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* ========================================================
-            2. SEARCH BAR & FILTER
-            ======================================================== */}
         <View style={[styles.searchContainer, flexRowStyle]}>
           <Ionicons name="search-outline" size={20} color="#94A3B8" />
           <TextInput
             style={[styles.searchInput, { textAlign: alignText }]}
             placeholder={
               lang === "ckb"
-                ? "گەڕان بۆ ئامێر یان خزمەتگوزاری..."
+                ? "...گەڕان بۆ ئامێر یان خزمەتگوزاری"
                 : "Search for appliance or service..."
             }
             placeholderTextColor="#94A3B8"
@@ -254,12 +245,8 @@ export default function HomeScreen() {
           )}
         </View>
 
-        {/* ========================================================
-            3. PROMO HERO BANNER (دیزاینی سەوز لەگەڵ وێنەی وەستا)
-            ======================================================== */}
         <View style={styles.promoBanner}>
           <View style={styles.promoContent}>
-            {/* Left Content */}
             <View style={styles.promoTextCol}>
               <Text style={[styles.promoTitle, { textAlign: alignText }]}>
                 {lang === "ckb"
@@ -286,7 +273,6 @@ export default function HomeScreen() {
                 </View>
               </View>
 
-              {/* Action Buttons */}
               <View style={[styles.promoButtonsRow, flexRowStyle]}>
                 <TouchableOpacity
                   style={[styles.instantServiceBtn, flexRowStyle]}
@@ -312,7 +298,6 @@ export default function HomeScreen() {
               </View>
             </View>
 
-            {/* Right Graphic Badge */}
             <View style={styles.promoGraphicWrapper}>
               <View style={styles.promoGraphicCircle}>
                 <Ionicons name="snow" size={48} color="#FFFFFF" />
@@ -320,7 +305,6 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* Dots Indicator */}
           <View style={styles.dotsRow}>
             <View style={[styles.dot, styles.activeDot]} />
             <View style={styles.dot} />
@@ -328,9 +312,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* ========================================================
-            4. POPULAR SERVICES GRID (٤ ستوون لە ٢ ڕیز)
-            ======================================================== */}
         <View style={styles.sectionContainer}>
           <View style={[styles.sectionHeaderRow, flexRowStyle]}>
             <Text style={styles.sectionTitle}>
@@ -386,9 +367,6 @@ export default function HomeScreen() {
           )}
         </View>
 
-        {/* ========================================================
-            5. RECOMMENDED FOR YOU CAROUSEL
-            ======================================================== */}
         <View style={styles.sectionContainer}>
           <View style={[styles.sectionHeaderRow, flexRowStyle]}>
             <Text style={styles.sectionTitle}>
@@ -423,10 +401,9 @@ export default function HomeScreen() {
 
               return (
                 <View key={card.id} style={styles.recommendCard}>
-                  {/* Card Cover Image */}
                   <View style={styles.cardImageContainer}>
                     <Image
-                      source={{ uri: card.image }}
+                      source={typeof card.image === "string" ? { uri: card.image } : card.image}
                       style={styles.cardImage}
                       resizeMode="cover"
                     />
@@ -437,13 +414,11 @@ export default function HomeScreen() {
                     </View>
                   </View>
 
-                  {/* Card Body */}
                   <View style={styles.cardBody}>
                     <Text style={[styles.recommendTitle, { textAlign: alignText }]}>
                       {title}
                     </Text>
 
-                    {/* Rating & Duration */}
                     <View style={[styles.ratingDurationRow, flexRowStyle]}>
                       <View style={[styles.ratingBox, flexRowStyle]}>
                         <Ionicons name="star" size={13} color="#EAB308" />
@@ -458,7 +433,6 @@ export default function HomeScreen() {
                       </View>
                     </View>
 
-                    {/* Verified Badge */}
                     <View style={[styles.verifiedBadgeRow, flexRowStyle]}>
                       <Ionicons name="shield-checkmark" size={13} color="#059669" />
                       <Text style={styles.verifiedBadgeText}>
@@ -466,7 +440,6 @@ export default function HomeScreen() {
                       </Text>
                     </View>
 
-                    {/* Price and Book Button */}
                     <View style={[styles.cardFooter, flexRowStyle]}>
                       <View>
                         <Text style={styles.priceText}>
@@ -494,61 +467,11 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* ========================================================
-            6. TRUST BADGES ROW (٤ متمانەپێکراوی)
-            ======================================================== */}
-        <View style={styles.trustRowContainer}>
-          <View style={[styles.trustGrid, flexRowStyle]}>
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconCircle}>
-                <Ionicons name="shield-checkmark-outline" size={22} color="#059669" />
-              </View>
-              <Text style={styles.trustTitle}>
-                {lang === "ckb" ? "وەستای پەسەندکراو" : "Verified Professionals"}
-              </Text>
-            </View>
-
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconCircle}>
-                <Ionicons name="cash-outline" size={22} color="#059669" />
-              </View>
-              <Text style={styles.trustTitle}>
-                {lang === "ckb" ? "نرخی ڕوون و ئاشکرا" : "Transparent Pricing"}
-              </Text>
-            </View>
-
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconCircle}>
-                <Ionicons name="ribbon-outline" size={22} color="#059669" />
-              </View>
-              <Text style={styles.trustTitle}>
-                {lang === "ckb" ? "تا ٣٠ ڕۆژ گەرەنتی" : "Up to 30 Days Warranty"}
-              </Text>
-            </View>
-
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconCircle}>
-                <Ionicons name="navigate-outline" size={22} color="#059669" />
-              </View>
-              <Text style={styles.trustTitle}>
-                {lang === "ckb" ? "چاودێری ڕاستەوخۆ" : "Live Tracking"}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* سپەیس بۆ ئەوەی ناوەڕۆک نەچێتە ژێر BottomNav */}
-        <View style={{ height: 85 }} />
+        <View style={{ height: 95 }} />
       </ScrollView>
 
-      {/* ========================================================
-          7. BOTTOM NAVIGATION BAR
-          ======================================================== */}
       <BottomNav activeTab="home" />
 
-      {/* ========================================================
-          MODALS: هەڵبژاردنی شار و ئاگادارییەکان
-          ======================================================== */}
       <Modal
         visible={locationModalVisible}
         transparent
@@ -560,7 +483,7 @@ export default function HomeScreen() {
             <Text style={styles.modalHeaderTitle}>
               {lang === "ckb" ? "شارەکەت هەڵبژێرە" : "Select Your City"}
             </Text>
-            {["Erbil", "Sulaymaniyah", "Duhok"].map((city) => (
+            {["Erbil", "Sulaymaniyah", "Ranya", "Duhok"].map((city) => (
               <TouchableOpacity
                 key={city}
                 style={[
@@ -587,8 +510,10 @@ export default function HomeScreen() {
                   {city === "Erbil"
                     ? lang === "ckb" ? "هەولێر (Erbil)" : "Erbil (هەولێر)"
                     : city === "Sulaymaniyah"
-                    ? lang === "ckb" ? "سلێمانی (Sulaymaniyah)" : "Sulaymaniyah (سلێمانی)"
-                    : lang === "ckb" ? "دهۆک (Duhok)" : "Duhok (دهۆک)"}
+                      ? lang === "ckb" ? "سلێمانی (Sulaymaniyah)" : "Sulaymaniyah (سلێمانی)"
+                      : city === "Ranya"
+                        ? lang === "ckb" ? "ڕانیە (Ranya)" : "Ranya (ڕانیە)"
+                        : lang === "ckb" ? "دهۆک (Duhok)" : "Duhok (دهۆک)"}
                 </Text>
                 {selectedCity === city && (
                   <Ionicons name="checkmark-circle" size={18} color="#059669" />
@@ -607,7 +532,6 @@ export default function HomeScreen() {
         </View>
       </Modal>
 
-      {/* Notification Modal */}
       <Modal
         visible={notificationModalVisible}
         transparent
@@ -652,7 +576,6 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  // 1. Top Bar
   topBar: {
     justifyContent: "space-between",
     alignItems: "center",
@@ -723,7 +646,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 
-  // 2. Search Bar
   searchContainer: {
     alignItems: "center",
     backgroundColor: "#F8FAFC",
@@ -731,7 +653,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E2E8F0",
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    height: 48,
     marginBottom: 16,
     gap: 10,
   },
@@ -739,13 +661,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     color: "#0F172A",
+    height: "100%",
     padding: 0,
+    outlineStyle: "none" as any,
   },
   filterBtn: {
     padding: 2,
   },
 
-  // 3. Promo Hero Banner
   promoBanner: {
     backgroundColor: "#064E3B",
     borderRadius: 20,
@@ -852,7 +775,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#10B981",
   },
 
-  // 4. Section & Popular Services Grid
   sectionContainer: {
     marginBottom: 22,
   },
@@ -913,7 +835,6 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
 
-  // 5. Recommended Carousel
   horizontalScrollList: {
     paddingRight: 8,
     gap: 12,
@@ -1044,7 +965,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  // 6. Trust Badges Row
   trustRowContainer: {
     backgroundColor: "#F8FAFC",
     borderWidth: 1,
@@ -1079,7 +999,6 @@ const styles = StyleSheet.create({
     lineHeight: 12,
   },
 
-  // Modals
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(15, 23, 42, 0.5)",

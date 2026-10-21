@@ -1,26 +1,53 @@
 import React, { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import { AuthProvider, useAuth } from "@/lib/AuthContext";
+
+if (Platform.OS === "web" && typeof document !== "undefined") {
+  const styleId = "rnw-focus-reset";
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent = `
+      input, textarea, select {
+        outline: none !important;
+        outline-width: 0 !important;
+        box-shadow: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      input:focus, textarea:focus, select:focus {
+        outline: none !important;
+        outline-width: 0 !important;
+        box-shadow: none !important;
+      }
+      [data-testid="bottom-nav"] {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
 
 function RootNavigation() {
   const { token, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
-  // بەڕێوەبردنی خۆکارانەی پاراستنی شاشەکان (Auth Guard)
+  // Route guard for authenticated session state
   useEffect(() => {
     if (isLoading) return;
 
     const inAuthGroup = segments[0] === "login" || segments[0] === "register";
 
     if (!token && !inAuthGroup) {
-      // ئەگەر لۆگین نەبووبێت، بینێرە بۆ شاشەی لۆگین
       router.replace("/login");
     } else if (token && inAuthGroup) {
-      // ئەگەر لۆگین بووبێت و لە شاشەی لۆگین بێت، بینێرە بۆ سەرەکی
       router.replace("/");
     }
   }, [token, isLoading, segments]);

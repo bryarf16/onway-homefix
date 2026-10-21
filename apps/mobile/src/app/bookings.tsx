@@ -156,9 +156,6 @@ export default function BookingsScreen() {
           />
         }
       >
-        {/* ========================================================
-            1. HEADER
-            ======================================================== */}
         <View style={[styles.header, flexRowStyle]}>
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>{t.myBookings}</Text>
@@ -174,9 +171,6 @@ export default function BookingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* ========================================================
-            2. SEGMENT TABS (All / Active / Completed)
-            ======================================================== */}
         <View style={[styles.segmentContainer, flexRowStyle]}>
           <TouchableOpacity
             style={[
@@ -245,9 +239,6 @@ export default function BookingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* ========================================================
-            3. BOOKINGS LIST
-            ======================================================== */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#059669" />
@@ -277,7 +268,6 @@ export default function BookingsScreen() {
 
               return (
                 <View key={booking.id} style={styles.bookingCard}>
-                  {/* Card Header: Booking ID + Status Badge */}
                   <View style={[styles.cardHeaderRow, flexRowStyle]}>
                     <View style={styles.bookingRefRow}>
                       <Text style={styles.bookingRefText}>
@@ -305,7 +295,6 @@ export default function BookingsScreen() {
                     </View>
                   </View>
 
-                  {/* Provider Info Row */}
                   <View style={[styles.providerRow, flexRowStyle]}>
                     <View style={styles.providerAvatar}>
                       <Text style={styles.providerAvatarText}>
@@ -324,7 +313,6 @@ export default function BookingsScreen() {
                     </View>
                   </View>
 
-                  {/* Scheduled Time & Address */}
                   <View style={styles.metaBox}>
                     <View style={[styles.metaItem, flexRowStyle]}>
                       <Ionicons name="time-outline" size={15} color="#059669" />
@@ -356,7 +344,6 @@ export default function BookingsScreen() {
                     )}
                   </View>
 
-                  {/* Card Footer: Quick Actions */}
                   <View style={[styles.cardFooter, flexRowStyle]}>
                     <TouchableOpacity
                       style={[styles.footerBtn, flexRowStyle]}
@@ -386,10 +373,9 @@ export default function BookingsScreen() {
           </View>
         )}
 
-        <View style={{ height: 85 }} />
+        <View style={{ height: 95 }} />
       </ScrollView>
 
-      {/* Bottom Nav */}
       <BottomNav activeTab="bookings" />
     </SafeAreaView>
   );
@@ -433,7 +419,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  // Segment Tabs
   segmentContainer: {
     backgroundColor: "#FFFFFF",
     borderRadius: 14,
@@ -462,7 +447,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 
-  // Loading & Empty
   loadingContainer: {
     paddingVertical: 40,
     alignItems: "center",
@@ -516,7 +500,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  // Booking Card
   bookingsList: {
     gap: 14,
   },

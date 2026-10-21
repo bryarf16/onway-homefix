@@ -8,7 +8,6 @@ import { eq, and, desc } from "drizzle-orm";
 import { db } from "./db";
 import { users, categories, providers, bookings } from "./db/schema";
 
-// پێناسەکردنی تایپەکانی Context بۆ Hono تا کێشەی c.get و c.set نەمێنێت
 type Variables = {
   user: {
     id: string;
@@ -19,12 +18,10 @@ type Variables = {
 
 const app = new Hono<{ Variables: Variables }>();
 
-// چالاککردنی CORS
 app.use("/*", cors());
 
 const JWT_SECRET = process.env.JWT_SECRET || "homefix-secret-jwt-key-2026";
 
-// شێوازی ستانداردی وەڵامەکان
 const sendSuccess = (c: any, data: any, message?: string, status: any = 200) => {
   return c.json({ success: true, message, data }, status);
 };
@@ -33,7 +30,7 @@ const sendError = (c: any, message: string, status: any = 400) => {
   return c.json({ success: false, message }, status);
 };
 
-// Middleware: پاراستنی ڕاوتەکان بە تۆکن
+// Authenticate JWT bearer token
 const authMiddleware = async (c: any, next: any) => {
   const authHeader = c.req.header("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -53,7 +50,6 @@ const authMiddleware = async (c: any, next: any) => {
   }
 };
 
-// Middleware: تەنها بۆ ئەدمین
 const adminMiddleware = async (c: any, next: any) => {
   const user = c.get("user");
   if (!user || user.role !== "admin") {
@@ -62,11 +58,6 @@ const adminMiddleware = async (c: any, next: any) => {
   await next();
 };
 
-// ----------------------------------------------------
-// ڕاوتەکان (Routes)
-// ----------------------------------------------------
-
-// 1. Health check (API up + database connected)
 app.get("/health", async (c) => {
   try {
     await db.select().from(categories).limit(1);
@@ -84,7 +75,6 @@ app.get("/health", async (c) => {
   }
 });
 
-// 2. Auth: Register (کڕیار)
 const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -125,7 +115,6 @@ app.post("/api/v1/auth/register", zValidator("json", registerSchema), async (c) 
   );
 });
 
-// 3. Auth: Login (کڕیار و ئەدمین)
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
@@ -163,13 +152,11 @@ app.post("/api/v1/auth/login", zValidator("json", loginSchema), async (c) => {
   );
 });
 
-// 4. Categories: هێنانی هەموو بەشە چالاکەکان
 app.get("/api/v1/categories", async (c) => {
   const data = await db.select().from(categories).where(eq(categories.isActive, true));
   return sendSuccess(c, data);
 });
 
-// زیادکردنی بەشی نوێ (Category)
 const createCategorySchema = z.object({
   name: z.string().min(2),
   nameCkb: z.string().min(2),
@@ -196,7 +183,6 @@ app.post(
   }
 );
 
-// زیادکردنی وەستای نوێ (Provider)
 const createProviderSchema = z.object({
   name: z.string().min(2),
   categoryId: z.string(),
@@ -229,15 +215,14 @@ app.post(
   }
 );
 
-// 5. Providers: هێنانی وەستاکان
 app.get("/api/v1/providers", async (c) => {
   const categoryId = c.req.query("categoryId") || c.req.query("category_id");
   const city = c.req.query("city");
-  const includeAll = c.req.query("all") === "true"; // بۆ ئەدمین
+  const includeAll = c.req.query("all") === "true";
 
   const conditions = [];
 
-  // ئەگەر all دانەنرابوو، تەنها چالاکەکان دەهێنێت (بۆ مۆبایل)
+  // Defaults to active providers for client applications
   if (!includeAll) {
     conditions.push(eq(providers.isActive, true));
   }
@@ -257,7 +242,6 @@ app.get("/api/v1/providers", async (c) => {
   return sendSuccess(c, data);
 });
 
-// 6. Bookings: دروستکردنی حجزکردن بۆ کڕیار
 const bookingSchema = z.object({
   providerId: z.string().uuid(),
   customerName: z.string().min(2),
@@ -288,7 +272,7 @@ app.post("/api/v1/bookings", authMiddleware, zValidator("json", bookingSchema), 
   return sendSuccess(c, newBooking, "Booking created successfully", 201);
 });
 
-// 7. Bookings: بینینی داواکارییەکانی کڕیاری لۆگینبوو (پشتگیری /me و /my دەکات)
+// Support both /me and /my aliases for customer bookings
 const getCustomerBookings = async (c: any) => {
   const user = c.get("user");
   const data = await db.query.bookings.findMany({
@@ -304,7 +288,6 @@ const getCustomerBookings = async (c: any) => {
 app.get("/api/v1/bookings/me", authMiddleware, getCustomerBookings);
 app.get("/api/v1/bookings/my", authMiddleware, getCustomerBookings);
 
-// ئەپدەیتکردنی وەستا (Edit Provider / Toggle isActive)
 app.patch("/api/v1/providers/:id", authMiddleware, adminMiddleware, async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
@@ -325,7 +308,6 @@ app.patch("/api/v1/providers/:id", authMiddleware, adminMiddleware, async (c) =>
   return sendSuccess(c, updated, "Provider updated successfully");
 });
 
-// ئەپدەیتکردنی کەتەگۆری (Edit Category / Toggle isActive)
 app.patch("/api/v1/categories/:id", authMiddleware, adminMiddleware, async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
@@ -344,7 +326,6 @@ app.patch("/api/v1/categories/:id", authMiddleware, adminMiddleware, async (c) =
   return sendSuccess(c, updated, "Category updated successfully");
 });
 
-// 8. Admin Bookings: بینینی هەموو داواکارییەکان (پشتگیری /bookings و /admin/bookings دەکات)
 const getAdminBookings = async (c: any) => {
   const statusFilter = c.req.query("status");
   const conditions = [];
@@ -368,7 +349,7 @@ const getAdminBookings = async (c: any) => {
 app.get("/api/v1/bookings", authMiddleware, adminMiddleware, getAdminBookings);
 app.get("/api/v1/admin/bookings", authMiddleware, adminMiddleware, getAdminBookings);
 
-// 9. Status Update: گۆڕینی دۆخی حجزکردن بەپێی زنجیرەی دروست
+// Enforce booking status transition rules
 const validTransitions: Record<string, string[]> = {
   pending: ["confirmed", "cancelled"],
   confirmed: ["in_progress", "cancelled"],

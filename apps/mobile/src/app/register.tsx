@@ -52,7 +52,6 @@ export default function RegisterScreen() {
 
     try {
       await register(name.trim(), email.trim(), password);
-      // چوونە ناو سەرەکی ئەپەکە دوای دروستکردنی سەرکەوتووانە
       router.replace("/");
     } catch (err: any) {
       if (err.message?.includes("already exists")) {
@@ -80,7 +79,6 @@ export default function RegisterScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* بەشی سەرەوە: دوگمەی گەڕانەوە و زمانی خێرا */}
           <View style={[styles.topBar, flexRowStyle]}>
             <TouchableOpacity
               onPress={() => router.back()}
@@ -106,7 +104,6 @@ export default function RegisterScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* لۆگۆ و سەردێڕ */}
           <View style={styles.header}>
             <View style={styles.iconCircle}>
               <Ionicons name="person-add" size={30} color="#059669" />
@@ -120,7 +117,6 @@ export default function RegisterScreen() {
             </Text>
           </View>
 
-          {/* پەیامی هەڵە */}
           {error && (
             <View style={[styles.errorContainer, flexRowStyle]}>
               <Ionicons name="alert-circle" size={18} color="#E11D48" />
@@ -130,9 +126,7 @@ export default function RegisterScreen() {
             </View>
           )}
 
-          {/* فۆڕم */}
           <View style={styles.form}>
-            {/* ناوی تەواو */}
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { textAlign: alignText }]}>
                 {t.name}
@@ -157,7 +151,6 @@ export default function RegisterScreen() {
               </View>
             </View>
 
-            {/* ئیمەیڵ */}
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { textAlign: alignText }]}>
                 {t.email}
@@ -184,7 +177,6 @@ export default function RegisterScreen() {
               </View>
             </View>
 
-            {/* پاسۆرد */}
             <View style={styles.inputGroup}>
               <Text style={[styles.inputLabel, { textAlign: alignText }]}>
                 {t.password}
@@ -220,7 +212,6 @@ export default function RegisterScreen() {
               </View>
             </View>
 
-            {/* دوگمەی تۆمارکردن */}
             <TouchableOpacity
               style={[styles.primaryButton, loading && styles.buttonDisabled]}
               onPress={handleRegister}
@@ -242,7 +233,6 @@ export default function RegisterScreen() {
               )}
             </TouchableOpacity>
 
-            {/* گەڕانەوە بۆ لۆگین */}
             <View style={[styles.footer, flexRowStyle]}>
               <Text style={styles.footerText}>{t.alreadyHaveAccount} </Text>
               <TouchableOpacity onPress={() => router.push("/login")}>
@@ -371,9 +361,12 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    height: "100%",
+    fontSize: 14.5,
     color: "#0F172A",
     fontWeight: "500",
+    padding: 0,
+    outlineStyle: "none" as any,
   },
   primaryButton: {
     backgroundColor: "#059669",

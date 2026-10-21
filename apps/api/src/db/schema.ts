@@ -1,7 +1,6 @@
 import { pgTable, text, timestamp, integer, boolean, uuid, pgEnum } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-// 1. پێناسەکردنی دۆخەکانی ڕۆڵ و حجزکردن
 export const roleEnum = pgEnum("role", ["customer", "admin"]);
 export const bookingStatusEnum = pgEnum("booking_status", [
     "pending",
@@ -11,7 +10,6 @@ export const bookingStatusEnum = pgEnum("booking_status", [
     "cancelled",
 ]);
 
-// 2. خشتەی بەکارهێنەران (Users)
 export const users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull(),
@@ -21,7 +19,6 @@ export const users = pgTable("users", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// 3. خشتەی بەشەکان (Categories)
 export const categories = pgTable("categories", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull(),
@@ -31,7 +28,6 @@ export const categories = pgTable("categories", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// 4. خشتەی وەستاکان (Providers)
 export const providers = pgTable("providers", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull(),
@@ -40,12 +36,11 @@ export const providers = pgTable("providers", {
         .notNull(),
     city: text("city").notNull(),
     phone: text("phone").notNull(),
-    hourlyRate: integer("hourly_rate").notNull(), // نرخ بە دینار
+    hourlyRate: integer("hourly_rate").notNull(),
     isActive: boolean("is_active").default(true).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// 5. خشتەی داواکارییەکان (Bookings)
 export const bookings = pgTable("bookings", {
     id: uuid("id").defaultRandom().primaryKey(),
     customerId: uuid("customer_id")
@@ -63,7 +58,6 @@ export const bookings = pgTable("bookings", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// 6. پەیوەندی نێوان خشتەکان (Relations)
 export const categoriesRelations = relations(categories, ({ many }) => ({
     providers: many(providers),
 }));

@@ -14,7 +14,7 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: "ckb", // بە شێوازی بنەڕەتی با کوردی بێت
+  lang: "ckb",
   dir: "rtl",
   isRTL: true,
   t: translations.ckb,
@@ -28,7 +28,6 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   const [lang, setLangState] = useState<Language>("ckb");
 
   useEffect(() => {
-    // هێنانی زمانی سەیڤکراو لە ناو مۆبایلەکە
     const loadSavedLang = async () => {
       try {
         const saved = (await AsyncStorage.getItem("homefix_mobile_lang")) as Language;

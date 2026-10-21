@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:3001/api/v1";
+const BASE_HOST = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL = `${BASE_HOST}/api/v1`;
 
 export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;

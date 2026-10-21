@@ -35,12 +35,9 @@ export default function BookScreen() {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [isLoadingProvider, setIsLoadingProvider] = useState(true);
 
-  // Form State
   const [customerName, setCustomerName] = useState(user?.name || "");
   const [phone, setPhone] = useState("0750 123 4567");
-  const [address, setAddress] = useState(
-    lang === "ckb" ? "هەولێر، گەڕەکی بەختیاری، کۆڵانی ١٤" : "Erbil, Bakhtiyari, Street 14"
-  );
+  const [address, setAddress] = useState(lang === "ckb" ? "هەولێر" : "Erbil");
   const [selectedDateDay, setSelectedDateDay] = useState<"today" | "tomorrow" | "dayAfter">("today");
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("10:00 AM");
   const [notes, setNotes] = useState("");
@@ -78,7 +75,6 @@ export default function BookScreen() {
       d.setDate(d.getDate() + 2);
     }
 
-    // دیاریکردنی کاتژمێر
     if (selectedTimeSlot.includes("09:00")) d.setHours(9, 0, 0, 0);
     else if (selectedTimeSlot.includes("10:00")) d.setHours(10, 0, 0, 0);
     else if (selectedTimeSlot.includes("01:00")) d.setHours(13, 0, 0, 0);
@@ -140,9 +136,6 @@ export default function BookScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* ========================================================
-            1. HEADER & BACK BUTTON
-            ======================================================== */}
         <View style={[styles.header, flexRowStyle]}>
           <TouchableOpacity
             style={styles.backButton}
@@ -166,9 +159,6 @@ export default function BookScreen() {
           </View>
         </View>
 
-        {/* ========================================================
-            2. PROVIDER SUMMARY CARD
-            ======================================================== */}
         {isLoadingProvider ? (
           <View style={styles.providerLoadingCard}>
             <ActivityIndicator size="small" color="#059669" />
@@ -204,11 +194,7 @@ export default function BookScreen() {
           </View>
         ) : null}
 
-        {/* ========================================================
-            3. BOOKING FORM
-            ======================================================== */}
         <View style={styles.formContainer}>
-          {/* Customer Name */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
               {t.customerName}
@@ -225,7 +211,6 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Phone Number */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
               {t.phone}
@@ -243,28 +228,58 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Full Address */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
-              {t.address}
+              {lang === "ckb" ? "پارێزگا / شار" : "Province / City"}
             </Text>
+
+            <View style={[styles.chipsRow, flexRowStyle, { flexWrap: "wrap", marginBottom: 10 }]}>
+              {[
+                { id: "Erbil", label: lang === "ckb" ? "هەولێر" : "Erbil" },
+                { id: "Sulaymaniyah", label: lang === "ckb" ? "سلێمانی" : "Sulaymaniyah" },
+                { id: "Ranya", label: lang === "ckb" ? "ڕانیە" : "Ranya" },
+                { id: "Duhok", label: lang === "ckb" ? "دهۆک" : "Duhok" },
+              ].map((c) => {
+                const isSelected = address === c.label || address === c.id;
+                return (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[
+                      styles.chipBtn,
+                      isSelected && styles.activeChipBtn,
+                      { paddingHorizontal: 14, paddingVertical: 8, marginEnd: 6, marginBottom: 6 },
+                    ]}
+                    onPress={() => setAddress(c.label)}
+                  >
+                    <Text
+                      style={[
+                        styles.chipBtnText,
+                        isSelected && styles.activeChipBtnText,
+                      ]}
+                    >
+                      {c.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
             <View style={[styles.inputWrapper, flexRowStyle]}>
-              <Ionicons name="location-outline" size={18} color="#94A3B8" />
+              <Ionicons name="location-outline" size={18} color="#059669" />
               <TextInput
                 style={[styles.textInput, { textAlign: alignText }]}
                 value={address}
                 onChangeText={setAddress}
                 placeholder={
                   lang === "ckb"
-                    ? "شار، گەڕەک، ناونیشانی تەواو"
-                    : "City, neighborhood, building"
+                    ? "هەولێر، سلێمانی، ڕانیە، دهۆک"
+                    : "Erbil, Sulaymaniyah, Ranya, Duhok"
                 }
                 placeholderTextColor="#94A3B8"
               />
             </View>
           </View>
 
-          {/* Date Selector Chips */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
               {lang === "ckb" ? "ڕۆژی خزمەتگوزاری" : "Service Date"}
@@ -323,7 +338,6 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Time Slot Chips */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
               {lang === "ckb" ? "کاتی گەیشتنی وەستا" : "Arrival Time Window"}
@@ -361,7 +375,6 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Notes / Description */}
           <View style={styles.formGroup}>
             <Text style={[styles.inputLabel, { textAlign: alignText }]}>
               {t.notes}
@@ -379,7 +392,6 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Transparent Price Summary */}
           <View style={styles.pricingSummaryCard}>
             <View style={[styles.priceSummaryRow, flexRowStyle]}>
               <Text style={styles.summaryLabel}>
@@ -409,7 +421,6 @@ export default function BookScreen() {
             </View>
           </View>
 
-          {/* Submit Button */}
           <TouchableOpacity
             style={[styles.submitButton, flexRowStyle]}
             onPress={handleSubmitBooking}
@@ -432,9 +443,6 @@ export default function BookScreen() {
         <View style={{ height: 40 }} />
       </ScrollView>
 
-      {/* ========================================================
-          SUCCESS MODAL
-          ======================================================== */}
       <Modal
         visible={!!successBookingId}
         transparent
@@ -601,7 +609,6 @@ const styles = StyleSheet.create({
     color: "#059669",
   },
 
-  // Form
   formContainer: {
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
@@ -630,8 +637,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 13,
+    height: "100%",
+    fontSize: 14,
     color: "#0F172A",
+    padding: 0,
+    outlineStyle: "none" as any,
   },
   chipsRow: {
     gap: 8,
@@ -700,7 +710,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
 
-  // Pricing
   pricingSummaryCard: {
     backgroundColor: "#F8FAFC",
     borderRadius: 14,
@@ -753,7 +762,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 
-  // Success Modal
   successModalOverlay: {
     flex: 1,
     backgroundColor: "rgba(15, 23, 42, 0.6)",

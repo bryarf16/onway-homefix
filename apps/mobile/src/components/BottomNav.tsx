@@ -7,6 +7,7 @@ import {
   Modal,
   ScrollView,
   Alert,
+  Platform,
 } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -46,8 +47,7 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
 
   return (
     <>
-      <View style={[styles.navContainer, flexRowStyle]}>
-        {/* Home */}
+      <View style={[styles.navContainer, flexRowStyle]} testID="bottom-nav">
         <TouchableOpacity
           style={styles.tabItem}
           onPress={() => handleNav("home")}
@@ -75,7 +75,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
           </Text>
         </TouchableOpacity>
 
-        {/* Bookings */}
         <TouchableOpacity
           style={styles.tabItem}
           onPress={() => handleNav("bookings")}
@@ -103,7 +102,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
           </Text>
         </TouchableOpacity>
 
-        {/* Support */}
         <TouchableOpacity
           style={styles.tabItem}
           onPress={() => handleNav("support")}
@@ -131,7 +129,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
           </Text>
         </TouchableOpacity>
 
-        {/* Account */}
         <TouchableOpacity
           style={styles.tabItem}
           onPress={() => handleNav("account")}
@@ -160,7 +157,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
         </TouchableOpacity>
       </View>
 
-      {/* Support Modal */}
       <Modal
         visible={supportModalVisible}
         transparent
@@ -233,7 +229,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
         </View>
       </Modal>
 
-      {/* Account / Profile Modal */}
       <Modal
         visible={accountModalVisible}
         transparent
@@ -263,7 +258,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
             </View>
 
             <View style={styles.accountOptions}>
-              {/* Language Switch */}
               <TouchableOpacity
                 style={[styles.accountOptionRow, flexRowStyle]}
                 onPress={() => {
@@ -274,7 +268,7 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
                   <Ionicons name="globe-outline" size={18} color="#059669" />
                 </View>
                 <Text style={[styles.optionLabel, { textAlign: alignText, flex: 1 }]}>
-                  {lang === "ckb" ? "گۆڕینی زمان بۆ ئینگلیزی" : "Switch to کوردی (CKB)"}
+                  {lang === "ckb" ? "گۆڕینی زمان بۆ ئینگلیزی" : "گۆڕینی زمان بۆ کوردی"}
                 </Text>
                 <Ionicons
                   name={isRTL ? "chevron-back" : "chevron-forward"}
@@ -283,7 +277,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
                 />
               </TouchableOpacity>
 
-              {/* View Bookings */}
               <TouchableOpacity
                 style={[styles.accountOptionRow, flexRowStyle]}
                 onPress={() => {
@@ -304,7 +297,6 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
                 />
               </TouchableOpacity>
 
-              {/* Logout */}
               <TouchableOpacity
                 style={[styles.accountOptionRow, styles.logoutOptionRow, flexRowStyle]}
                 onPress={handleLogout}
@@ -345,22 +337,23 @@ export default function BottomNav({ activeTab = "home" }: BottomNavProps) {
 
 const styles = StyleSheet.create({
   navContainer: {
-    position: "absolute",
+    position: Platform.OS === "web" ? ("fixed" as any) : "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 72,
+    zIndex: 9999,
+    height: 70,
     backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
-    borderTopColor: "#F1F5F9",
+    borderTopColor: "#E2E8F0",
     paddingHorizontal: 16,
     justifyContent: "space-around",
     alignItems: "center",
     shadowColor: "#0F172A",
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.08,
     shadowRadius: 10,
-    elevation: 8,
+    elevation: 10,
   },
   tabItem: {
     alignItems: "center",
@@ -389,7 +382,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  // Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(15, 23, 42, 0.5)",

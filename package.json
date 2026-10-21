@@ -1,0 +1,11 @@
+{
+  "name": "homefix-monorepo",
+  "private": true,
+  "scripts": {
+    "dev:api": "bun --cwd apps/api dev",
+    "dev:dashboard": "bun --cwd apps/dashboard dev",
+    "dev:mobile": "bun --cwd apps/mobile web",
+    "db:push": "bun --cwd apps/api db:push",
+    "db:seed": "bun --cwd apps/api db:seed"
+  }
+}
