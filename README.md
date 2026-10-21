@@ -2,6 +2,11 @@
 
 A full-stack home service booking application connecting homeowners with local technicians (plumbers, electricians, cleaners, and HVAC specialists). Includes an admin management dashboard and a bilingual customer mobile app supporting English and Central Kurdish (Sorani) with dynamic RTL layouts.
 
+## 🎥 Demo Video
+
+Watch the complete project walkthrough and feature demonstration:
+- [**▶️ Watch Full Demo Video (Google Drive)**](https://drive.google.com/file/d/1XqzHav7768OAmMA8w_QE39YUd2cIzeLA/view?usp=sharing)
+
 ## Repository Structure
 
 The monorepo contains three main applications:
