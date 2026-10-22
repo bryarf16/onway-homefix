@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import safeStorage from "./storage";
 import { apiFetch } from "./api";
 
 export interface User {
@@ -40,8 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem("customer_token");
-        const storedUser = await AsyncStorage.getItem("customer_user");
+        const storedToken = await safeStorage.getItem("customer_token");
+        const storedUser = await safeStorage.getItem("customer_user");
 
         if (storedToken && storedUser) {
           setToken(storedToken);
@@ -70,8 +70,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const authUser = res.data.user;
     const authToken = res.data.token;
 
-    await AsyncStorage.setItem("customer_token", authToken);
-    await AsyncStorage.setItem("customer_user", JSON.stringify(authUser));
+    await safeStorage.setItem("customer_token", authToken);
+    await safeStorage.setItem("customer_user", JSON.stringify(authUser));
 
     setToken(authToken);
     setUser(authUser);
@@ -91,8 +91,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const authUser = res.data.user;
     const authToken = res.data.token;
 
-    await AsyncStorage.setItem("customer_token", authToken);
-    await AsyncStorage.setItem("customer_user", JSON.stringify(authUser));
+    await safeStorage.setItem("customer_token", authToken);
+    await safeStorage.setItem("customer_user", JSON.stringify(authUser));
 
     setToken(authToken);
     setUser(authUser);
@@ -101,8 +101,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem("customer_token");
-      await AsyncStorage.removeItem("customer_user");
+      await safeStorage.removeItem("customer_token");
+      await safeStorage.removeItem("customer_user");
     } catch (e) {
       console.error("Failed to clear auth storage", e);
     }

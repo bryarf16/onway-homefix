@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import safeStorage from "./storage";
 import { translations, Language } from "./translations";
 
 interface LanguageContextType {
@@ -30,7 +30,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const loadSavedLang = async () => {
       try {
-        const saved = (await AsyncStorage.getItem("homefix_mobile_lang")) as Language;
+        const saved = (await safeStorage.getItem("homefix_mobile_lang")) as Language;
         if (saved && (saved === "en" || saved === "ckb")) {
           setLangState(saved);
         }
@@ -44,7 +44,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   const setLanguage = async (newLang: Language) => {
     setLangState(newLang);
     try {
-      await AsyncStorage.setItem("homefix_mobile_lang", newLang);
+      await safeStorage.setItem("homefix_mobile_lang", newLang);
     } catch (e) {
       console.error("Failed to save language preference", e);
     }

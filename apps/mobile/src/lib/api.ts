@@ -1,6 +1,6 @@
 import Constants from "expo-constants";
 import { Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import safeStorage from "./storage";
 
 // Resolve API host: browser hostname on web, Expo hostUri on native, or local fallbacks
 export const getApiBaseUrl = (): string => {
@@ -33,7 +33,7 @@ export const apiFetch = async <T = any>(
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> => {
   const baseUrl = getApiBaseUrl();
-  const token = await AsyncStorage.getItem("customer_token");
+  const token = await safeStorage.getItem("customer_token");
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
